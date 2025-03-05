@@ -27,14 +27,14 @@
     ],
     "image_create_size": "768x768",
     "image_recognition": true,
-    "model": "dify",
+    "model": "baidu",
     "qwen_access_key_id": "LTAI5tGyKC97SVHvLWn3gQqx",
     "qwen_access_key_secret": "WMzV1nbCugxrXwJeG5us0VLglDU0qA",
     "qwen_agent_key": "",
     "qwen_app_id": "117876177",
     "qwen_node_id": "",
     "single_chat_prefix": [
-        ""
+        "@bot"
     ],
     "single_chat_reply_prefix": "",
     "speech_recognition": true,
