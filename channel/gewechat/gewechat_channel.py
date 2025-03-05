@@ -236,7 +236,7 @@ class Query:
             logger.debug(f"[gewechat] ignore expired message from {gewechat_msg.actual_user_id}: {gewechat_msg.content}")
             return "success"
         logger.debug(f"[gewechat] gewechat_msg :{gewechat_msg}")
-        if gewechat_msg.from_user_id=gewechat_msg.actual_user_id:
+        if gewechat_msg.from_user_id==gewechat_msg.actual_user_id:
             gewechat_msg.actual_user_id=""
         logger.debug(f"[gewechat] ignore message from myself: {gewechat_msg.actual_user_id}: {gewechat_msg.content}")
         return "success"
