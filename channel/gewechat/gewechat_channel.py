@@ -225,9 +225,9 @@ class Query:
             logger.debug(f"[gewechat] ignore non-user message from {gewechat_msg.from_user_id}: {gewechat_msg.content}")
             return "success"
 
-        matchPrefix=check_prefix(gewechat_msg.content, conf().get("group_chat_prefix"))
+        gewechat_msg.content, matchPrefix=check_and_remove_prefix(gewechat_msg.content, conf().get("group_chat_prefix"))
         # 忽略来自自己的消息
-        if gewechat_msg.my_msg and gewechat_msg.ctype != ContextType.IMAGE_CREATE and not matchPrefix:
+        if gewechat_msg.my_msg and not matchPrefix:
             logger.debug(f"[gewechat] ignore message from myself: {gewechat_msg.actual_user_id}: {gewechat_msg.content}")
             return "success"
 
@@ -248,10 +248,14 @@ class Query:
         return "success"
 
 
-def check_prefix(content, prefix_list):
+def check_and_remove_prefix(content, prefix_list):
+    """检查并删除匹配的前缀"""
     if not prefix_list:
-        return None
+        return content, None  # 返回（新内容，匹配到的前缀）
+
     for prefix in prefix_list:
         if content.startswith(prefix):
-            return prefix
-    return None
+            # 删除匹配到的前缀并返回
+            new_content = content[len(prefix):].lstrip()  # 可选：去掉前缀后的空格
+            return new_content, prefix
+    return content, None

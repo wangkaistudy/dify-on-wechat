@@ -81,14 +81,6 @@ class BaiduWenxinBot(Bot):
     def reply_text(self, session: BaiduWenxinSession, retry_count=0):
         try:
             logger.info("[BAIDU] model={}".format(session.model))
-            access_token = self.get_access_token()
-            if access_token == 'None':
-                logger.warn("[BAIDU] access token 获取失败")
-                return {
-                    "total_tokens": 0,
-                    "completion_tokens": 0,
-                    "content": 0,
-                }
             url = "https://qianfan.baidubce.com/v2/chat/completions"
             headers = {
                 'Content-Type': 'application/json',
@@ -136,7 +128,7 @@ class BaiduWenxinBot(Bot):
             # 转换过程
 
 
-            logger.info("[OPEN_AI] image_url={}".image_url)
+            logger.info("[OPEN_AI] image_url={}".format(image_url))
 
             return True, image_url
         except Exception as e:
