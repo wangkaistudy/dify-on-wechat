@@ -1,0 +1,45 @@
+{
+    "baidu_wenxin_api_key": "bce-v3/ALTAK-oN4Ry4N8wuRNg5kMf8XOW/19b5d17c26e67ac6026c05e677e83371678c93db",
+    "baidu_wenxin_model": "ernie-4.0-turbo-128k",
+    "baidu_wenxin_prompt_enabled": false,
+    "baidu_wenxin_secret_key": "J1RaaZpiRunC9XSHoCfFU074ggEvzbrF",
+    "channel_type": "gewechat",
+    "dashscope_api_key": "sk-ef4e5d68b3584a619469a0bfe802c17e",
+    "debug": true,
+    "dify_api_base": "https://api.dify.ai/v1",
+    "dify_api_key": "app-eh7lwCbqeUEe4JGSd9DxlyoA",
+    "dify_app_type": "chatbot",
+    "gewechat_app_id": "wx_sYDgxI_tzXJhXmTiWWKAa",
+    "gewechat_base_url": "http://172.27.66.206:2531/v2/api",
+    "gewechat_callback_url": "http://172.27.66.206:9919/v2/api/callback/collect",
+    "gewechat_download_url": "http://172.27.66.206:2532/download",
+    "gewechat_token": "6b34dced5b8b49ae8bf17a6a200486ba",
+    "group_chat_prefix": [
+        "@bot"
+    ],
+    "group_name_white_list": [
+        "ALL_GROUP"
+    ],
+    "image_create_prefix": [
+        "画",
+        "看",
+        "找"
+    ],
+    "image_create_size": "768x768",
+    "image_recognition": true,
+    "model": "dify",
+    "qwen_access_key_id": "LTAI5tGyKC97SVHvLWn3gQqx",
+    "qwen_access_key_secret": "WMzV1nbCugxrXwJeG5us0VLglDU0qA",
+    "qwen_agent_key": "",
+    "qwen_app_id": "117876177",
+    "qwen_node_id": "",
+    "single_chat_prefix": [
+        ""
+    ],
+    "single_chat_reply_prefix": "",
+    "speech_recognition": true,
+    "text_to_image": "dall-e-2",
+    "text_to_voice": "dify",
+    "voice_reply_voice": true,
+    "voice_to_text": "dify"
+}

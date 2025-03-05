@@ -1,5 +1,6 @@
 # encoding:utf-8
-
+import base64
+import io
 import requests
 import json
 from common import const
@@ -66,6 +67,9 @@ class BaiduWenxinBot(Bot):
                         reply = Reply(ReplyType.TEXT, reply_content)
                 return reply
             elif context.type == ContextType.IMAGE_CREATE:
+                if not conf().get("text_to_image"):
+                    logger.warn("[LinkAI] text_to_image is not enabled, ignore the IMAGE_CREATE request")
+                    return Reply(ReplyType.TEXT, "")
                 ok, retstring = self.create_img(query, 0)
                 reply = None
                 if ok:
@@ -84,16 +88,18 @@ class BaiduWenxinBot(Bot):
                     "total_tokens": 0,
                     "completion_tokens": 0,
                     "content": 0,
-                    }
-            url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/" + session.model + "?access_token=" + access_token
+                }
+            url = "https://qianfan.baidubce.com/v2/chat/completions"
             headers = {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization':'Bearer '+conf().get("baidu_wenxin_api_key")
+
             }
-            payload = {'messages': session.messages, 'system': self.prompt} if self.prompt_enabled else {'messages': session.messages}
+            payload = {'messages': session.messages, 'system': self.prompt,"model": session.model} if self.prompt_enabled else {'messages': session.messages,"model": session.model}
             response = requests.request("POST", url, headers=headers, data=json.dumps(payload))
             response_text = json.loads(response.text)
             logger.info(f"[BAIDU] response text={response_text}")
-            res_content = response_text["result"]
+            res_content = response_text["choices"][0]["message"]["content"]
             total_tokens = response_text["usage"]["total_tokens"]
             completion_tokens = response_text["usage"]["completion_tokens"]
             logger.info("[BAIDU] reply={}".format(res_content))
@@ -110,11 +116,29 @@ class BaiduWenxinBot(Bot):
             result = {"total_tokens": 0, "completion_tokens": 0, "content": "出错了: {}".format(e)}
             return result
 
-    def get_access_token(self):
-        """
-        使用 AK，SK 生成鉴权签名（Access Token）
-        :return: access_token，或是None(如果错误)
-        """
-        url = "https://aip.baidubce.com/oauth/2.0/token"
-        params = {"grant_type": "client_credentials", "client_id": BAIDU_API_KEY, "client_secret": BAIDU_SECRET_KEY}
-        return str(requests.post(url, params=params).json().get("access_token"))
+
+
+    def create_img(self, query, retry_count=0, api_key=None):
+        try:
+            logger.info("[BAIDU] image_query={}".format(query))
+
+            url = "https://qianfan.baidubce.com/v2/images/generations"
+            headers = {
+                "Content-Type": "application/json",
+                'Authorization':'Bearer '+conf().get("baidu_wenxin_api_key")
+            }
+            data = {
+                "prompt": query,
+                "model": "irag-1.0",
+            }
+            res = requests.post(url, headers=headers, json=data, timeout=(5, 90))
+            image_url = res.json()["data"][0]["url"]
+            # 转换过程
+
+
+            logger.info("[OPEN_AI] image_url={}".image_url)
+
+            return True, image_url
+        except Exception as e:
+            logger.error(format(e))
+            return False, "画图出现问题，请休息一下再问我吧"
