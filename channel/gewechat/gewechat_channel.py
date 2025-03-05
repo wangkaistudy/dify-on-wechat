@@ -225,8 +225,9 @@ class Query:
             logger.debug(f"[gewechat] ignore non-user message from {gewechat_msg.from_user_id}: {gewechat_msg.content}")
             return "success"
 
+        matchPrefix=check_prefix(gewechat_msg.content, conf().get("group_chat_prefix"))
         # 忽略来自自己的消息
-        if gewechat_msg.my_msg:
+        if gewechat_msg.my_msg and gewechat_msg.ctype != ContextType.IMAGE_CREATE and not matchPrefix:
             logger.debug(f"[gewechat] ignore message from myself: {gewechat_msg.actual_user_id}: {gewechat_msg.content}")
             return "success"
 
@@ -234,7 +235,7 @@ class Query:
         if int(gewechat_msg.create_time) < int(time.time()) - 60 * 5: # 跳过5分钟前的历史消息
             logger.debug(f"[gewechat] ignore expired message from {gewechat_msg.actual_user_id}: {gewechat_msg.content}")
             return "success"
-
+        logger.debug(f"[gewechat] gewechat_msg :{gewechat_msg}")
         context = channel._compose_context(
             gewechat_msg.ctype,
             gewechat_msg.content,
@@ -242,5 +243,15 @@ class Query:
             msg=gewechat_msg,
         )
         if context:
+            logger.debug(f"[gewechat] deal1 msg:{context}")
             channel.produce(context)
         return "success"
+
+
+def check_prefix(content, prefix_list):
+    if not prefix_list:
+        return None
+    for prefix in prefix_list:
+        if content.startswith(prefix):
+            return prefix
+    return None

@@ -66,6 +66,7 @@ class Bridge(object):
 
         self.bots = {}
         self.chat_bots = {}
+        logger.info(f"bridge init:{self.btype}")
 
     # 模型对应的接口
     def get_bot(self, typename):
