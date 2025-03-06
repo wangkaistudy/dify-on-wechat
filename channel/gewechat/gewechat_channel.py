@@ -246,6 +246,7 @@ class Query:
             isgroup=gewechat_msg.is_group,
             msg=gewechat_msg,
         )
+        logger.debug(f"[gewechat] deal msg:{context}")
         if context:
             logger.debug(f"[gewechat] deal1 msg:{context}")
             channel.produce(context)
