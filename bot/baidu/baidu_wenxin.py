@@ -87,7 +87,7 @@ class BaiduWenxinBot(Bot):
                 'Authorization':'Bearer '+conf().get("baidu_wenxin_api_key")
 
             }
-            payload = {'messages': session.messages, 'system': self.prompt,"model": session.model,'web_search':'enable'} if self.prompt_enabled else {'messages': session.messages,"model": session.model,'web_search':'enable}
+            payload = {'messages': session.messages, 'system': self.prompt,"model": session.model,'web_search':'enable'} if self.prompt_enabled else {'messages': session.messages,"model": session.model,'web_search':'enable'}
             response = requests.request("POST", url, headers=headers, data=json.dumps(payload))
             response_text = json.loads(response.text)
             logger.info(f"[BAIDU] response text={response_text}")
